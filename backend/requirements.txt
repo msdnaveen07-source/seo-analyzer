@@ -1,0 +1,14 @@
+fastapi>=0.100.0
+uvicorn>=0.22.0
+sqlalchemy>=2.0.0
+pydantic>=2.0.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+playwright>=1.35.0
+pytrends>=4.9.0
+textstat>=0.7.3
+lxml>=4.9.0
+python-multipart>=0.0.6
+jinja2>=3.1.2
+reportlab>=4.0.0
+pytest>=7.4.0

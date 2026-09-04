@@ -1,0 +1,31 @@
+# Environments & Secrets
+.env
+.env.local
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & logs
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+.pytest_cache/
+
+# Node & Frontend dependencies
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# SQLite Database & Storage
+*.db
+seo_analyzer.db
+backups/
+
+# IDE & System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
