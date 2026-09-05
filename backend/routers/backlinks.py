@@ -343,12 +343,38 @@ def verify_batch_backlinks(limit: int = 10, db: Session = Depends(get_db)):
 def get_high_da_targets():
     return {"targets": HIGH_DA_TARGETS}
 
+@router.get("/export-pdf")
+def export_pdf_report(date_str: Optional[str] = None, db: Session = Depends(get_db)):
+    from backend.tools.pdf_generator import generate_backlink_pdf_report
+    query = db.query(BacklinkSubmission)
+    if date_str:
+        try:
+            target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            start = datetime.combine(target_date, datetime.min.time())
+            end = datetime.combine(target_date, datetime.max.time())
+            query = query.filter(BacklinkSubmission.created_at >= start, BacklinkSubmission.created_at <= end)
+        except ValueError:
+            pass
+            
+    items = query.order_by(BacklinkSubmission.created_at.desc()).all()
+    stats_data = get_backlink_stats(db=db)
+    target_url = items[0].target_url if items else "All Domains"
+    
+    pdf_bytes = generate_backlink_pdf_report(items, target_url=target_url, stats=stats_data)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename=backlinks_executive_report_{date_str or 'all'}.pdf"}
+    )
+
 @router.get("/export-report")
 def export_report(
     date_str: Optional[str] = None, # YYYY-MM-DD
-    format: str = Query("csv", pattern="^(csv|markdown)$"),
+    format: str = Query("csv", pattern="^(csv|markdown|pdf)$"),
     db: Session = Depends(get_db)
 ):
+    if format == "pdf":
+        return export_pdf_report(date_str=date_str, db=db)
     query = db.query(BacklinkSubmission)
     if date_str:
         try:

@@ -41,11 +41,15 @@ def check_and_run_daily_schedule():
                     count=config.daily_goal,
                     db=db
                 )
+                # Auto-Submit newly generated backlinks to Google & IndexNow indexers
+                from backend.routers.backlinks import ping_google_indexer
+                ping_res = ping_google_indexer(db=db)
+                
                 config.last_run_at = now
                 config.next_run_at = now + timedelta(days=1)
                 config.updated_at = now
                 db.commit()
-                print(f"[24/7 Agentic Auto-Scheduler] Successfully created {res.get('total_created', 0)} daily backlinks!")
+                print(f"[24/7 Agentic Auto-Scheduler] Successfully created {res.get('total_created', 0)} daily backlinks & submitted to Google indexer!")
     except Exception as e:
         print(f"[24/7 Agentic Auto-Scheduler] Error during schedule check: {e}")
     finally:

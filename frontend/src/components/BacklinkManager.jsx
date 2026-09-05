@@ -1031,6 +1031,13 @@ export default function BacklinkManager() {
               <div className="report-actions" style={{ flexWrap: 'wrap', gap: '12px' }}>
                 <button 
                   className="btn btn-primary"
+                  onClick={() => downloadReport('pdf')}
+                  style={{ background: '#4f46e5', color: '#fff' }}
+                >
+                  <FileText size={16} /> 📄 Export Executive PDF Report
+                </button>
+                <button 
+                  className="btn btn-primary"
                   onClick={() => downloadReport('csv')}
                 >
                   <FileSpreadsheet size={16} /> Export CSV Report
