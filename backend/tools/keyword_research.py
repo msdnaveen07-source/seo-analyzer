@@ -36,7 +36,7 @@ class KeywordResearcher:
         if not keyword:
             return {"trend": [], "avg_interest": 0}
         try:
-            pytrend = TrendReq(hl="en-US", tz=360, timeout=(10, 25))
+            pytrend = TrendReq(hl="en-US", tz=360, timeout=(3, 5))
             pytrend.build_payload([keyword], cat=0, timeframe="today 12-m", geo="", gprop="")
             df = pytrend.interest_over_time()
             if not df.empty and keyword in df.columns:
@@ -55,11 +55,9 @@ class KeywordResearcher:
         if not keyword:
             return {"paa": [], "related": [], "exact_results_est": 1000}
 
-        time.sleep(1.0) # Local rate limiting delay
-
         url = f"https://www.google.com/search?q={requests.utils.quote(keyword)}&hl=en"
         try:
-            resp = requests.get(url, headers=self.headers, timeout=10)
+            resp = requests.get(url, headers=self.headers, timeout=3)
             if resp.status_code == 200:
                 soup = BeautifulSoup(resp.text, "html.parser")
                 
