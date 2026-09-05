@@ -5,7 +5,7 @@ export const API_BASE = 'https://seo-analyzer-v4pu.onrender.com';
 export async function apiFetch(endpoint, options = {}) {
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${cleanEndpoint}`;
-  
+
   let res;
   try {
     res = await fetch(url, options);
