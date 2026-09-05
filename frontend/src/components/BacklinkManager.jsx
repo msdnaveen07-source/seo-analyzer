@@ -515,6 +515,18 @@ export default function BacklinkManager() {
                 </div>
               </div>
 
+              <div className="form-group" style={{ marginTop: '10px' }}>
+                <label>🎯 Primary Target Keyword(s) (For Auto-Pilot & Default Anchor Text)</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={brandProfile.primary_keyword}
+                  onChange={(e) => setBrandProfile({...brandProfile, primary_keyword: e.target.value})}
+                  placeholder="e.g. SEO optimization guide, car repair services, engine diagnostics"
+                />
+                <span className="subtext" style={{ fontSize: '11px', color: '#94a3b8' }}>💡 Tip: Enter single or multiple keywords separated by commas.</span>
+              </div>
+
               <button 
                 type="submit" 
                 className="btn btn-secondary btn-sm" 
@@ -613,13 +625,13 @@ export default function BacklinkManager() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Target Keyword (Anchor Text)</label>
+                  <label>Target Keywords (Single or Comma-Separated)</label>
                   <input 
                     type="text" 
                     required 
                     value={autoForm.target_keyword}
                     onChange={(e) => setAutoForm({...autoForm, target_keyword: e.target.value})}
-                    placeholder="e.g. best seo services"
+                    placeholder="e.g. SEO optimization guide, car repair services, engine diagnostics"
                   />
                 </div>
               </div>

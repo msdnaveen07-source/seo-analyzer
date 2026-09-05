@@ -94,12 +94,16 @@ def select_anchor_text(target_keyword: str, target_url: str) -> str:
     target_domain = extract_domain(target_url)
     brand_name = target_domain.split('.')[0].capitalize() if target_domain else "Website"
     
+    # Support comma-separated multiple target keywords
+    kw_list = [k.strip() for k in target_keyword.split(",") if k.strip()]
+    chosen_kw = random.choice(kw_list) if kw_list else target_keyword
+    
     roll = random.random()
-    if roll < 0.50 and target_keyword:
-        return target_keyword
-    elif roll < 0.70:
-        return random.choice([f"Official {target_keyword} Guide", "View Detailed Resource", "Learn More", "Check Official Website"])
-    elif roll < 0.85:
+    if roll < 0.55 and chosen_kw:
+        return chosen_kw
+    elif roll < 0.75:
+        return random.choice([f"Official {chosen_kw} Guide", "View Detailed Resource", "Learn More", "Check Official Website"])
+    elif roll < 0.88:
         return brand_name
     else:
         return target_url
