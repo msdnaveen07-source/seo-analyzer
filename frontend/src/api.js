@@ -1,6 +1,6 @@
 // Centralized API configuration and fetch wrapper
 
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://seo-analyzer-v4pu.onrender.com';
 
 export async function apiFetch(endpoint, options = {}) {
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
