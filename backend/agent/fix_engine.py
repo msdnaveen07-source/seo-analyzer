@@ -72,11 +72,53 @@ class AutonomousFixEngine:
 
         elif check_id == "technical_seo":
             canonical_code = f'<link rel="canonical" href="https://example.com/canonical-page" />\n<meta name="viewport" content="width=device-width, initial-scale=1.0" />'
+            
+            # Detect location in keyword or fallback to Irving/Local
+            loc_match = re.search(r'\bin\s+([A-Za-z\s]+)', kw, re.I)
+            city_name = loc_match.group(1).title() if loc_match else "Irving"
+            
             schema_data = {
                 "@context": "https://schema.org",
-                "@type": "Article",
-                "headline": f"{kw_title_case} Guide",
-                "author": {"@type": "Organization", "name": "Local SEO Agent"},
+                "@graph": [
+                    {
+                        "@type": "LocalBusiness",
+                        "name": f"Fairepairs {kw_title_case} Specialist",
+                        "description": f"Top-rated {kw} and professional service center in {city_name}.",
+                        "url": "https://fairepairs.com/",
+                        "telephone": "+1-972-555-0199",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "1200 N MacArthur Blvd",
+                            "addressLocality": city_name,
+                            "addressRegion": "TX" if city_name.lower() == "irving" else "US",
+                            "addressCountry": "US"
+                        },
+                        "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 32.8140,
+                            "longitude": -96.9488
+                        },
+                        "openingHoursSpecification": {
+                            "@type": "OpeningHoursSpecification",
+                            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                            "opens": "08:00",
+                            "closes": "18:00"
+                        }
+                    },
+                    {
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": f"What is the best {kw} in {city_name}?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": f"Fairepairs provides top-rated, certified {kw} in {city_name} with transparent pricing and expert service diagnostics."
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
             schema_json = json.dumps(schema_data, indent=2)
             schema_code = f'<script type="application/ld+json">\n{schema_json}\n</script>'
