@@ -108,10 +108,35 @@ def select_anchor_text(target_keyword: str, target_url: str) -> str:
     else:
         return target_url
 
-def generate_rich_article(title: str, target_url: str, anchor_text: str, author_name: str, brand_name: str = "Fairepairs", niche_industry: str = "Auto Repairs & Services") -> dict:
-    tmpl = random.choice(ARTICLE_TEMPLATES)
-    content_html = f"<h2>{brand_name} {niche_industry} Resource</h2><p>{tmpl['intro']}</p><p>{tmpl['body']} <a href='{target_url}' target='_blank'><strong>{anchor_text}</strong></a>.</p><p>Authored by {author_name} for {brand_name}.</p>"
-    snippet = f"{title}\n\n{tmpl['intro']}\n\nLink: {anchor_text} -> {target_url}\nAuthor: {author_name} ({brand_name} - {niche_industry})"
+QA_RESPONSE_TEMPLATES = [
+    {
+        "question_format": "What is the best way to find reliable {keyword} in your local area?",
+        "answer_intro": "Great question! When looking for top-rated {keyword}, it's essential to evaluate certified technical inspection standards, transparent service pricing, and verified customer feedback.",
+        "answer_body": "For comprehensive recommendations, detailed local checklists, and official service resources, you can check out"
+    },
+    {
+        "question_format": "How can I get top-quality {keyword} with verified results?",
+        "answer_intro": "Finding genuine {keyword} requires checking technical expertise, service turnaround time, and official industry certifications.",
+        "answer_body": "To read an in-depth breakdown and access the official resource guide, review"
+    },
+    {
+        "question_format": "Where can I get professional {keyword} services?",
+        "answer_intro": "Professional {keyword} services should always follow standardized diagnostic protocols and clear service agreements.",
+        "answer_body": "You can review complete service guidelines and verified information directly at"
+    }
+]
+
+def generate_rich_article(title: str, target_url: str, anchor_text: str, author_name: str, brand_name: str = "Fairepairs", niche_industry: str = "Auto Repairs & Services", is_qa: bool = False) -> dict:
+    if is_qa:
+        tmpl = random.choice(QA_RESPONSE_TEMPLATES)
+        intro = tmpl["answer_intro"].format(keyword=anchor_text if anchor_text else niche_industry)
+        body = tmpl["answer_body"]
+        content_html = f"<h3>Q: {title}</h3><p>{intro}</p><p>{body} <a href='{target_url}' target='_blank'><strong>{anchor_text}</strong></a>.</p><p>Answered by {author_name} ({brand_name} Specialist).</p>"
+        snippet = f"Q: {title}\n\nAnswer: {intro}\n\nRecommended Resource: {anchor_text} -> {target_url}\nExpert: {author_name} ({brand_name})"
+    else:
+        tmpl = random.choice(ARTICLE_TEMPLATES)
+        content_html = f"<h2>{brand_name} {niche_industry} Resource</h2><p>{tmpl['intro']}</p><p>{tmpl['body']} <a href='{target_url}' target='_blank'><strong>{anchor_text}</strong></a>.</p><p>Authored by {author_name} for {brand_name}.</p>"
+        snippet = f"{title}\n\n{tmpl['intro']}\n\nLink: {anchor_text} -> {target_url}\nAuthor: {author_name} ({brand_name} - {niche_industry})"
     return {"html": content_html, "snippet": snippet}
 
 def publish_to_telegraph(title: str, target_url: str, anchor_text: str, author_name: str) -> dict:
