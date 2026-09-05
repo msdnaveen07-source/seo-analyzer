@@ -1,8 +1,6 @@
 // Centralized API configuration and fetch wrapper
 
-export const API_BASE = (typeof window !== 'undefined' && window.location.hostname.includes('hostingersite.com'))
-  ? window.location.origin
-  : 'https://seo-analyzer-v4pu.onrender.com';
+export const API_BASE = 'https://seo-analyzer-v4pu.onrender.com';
 
 export async function apiFetch(endpoint, options = {}) {
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
