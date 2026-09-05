@@ -45,6 +45,28 @@ MASS_ANALYTICS_PLATFORMS = [
 ]
 
 SIMULATED_PLATFORMS = [
+    # User Provided Real SEO Web Directories
+    {"domain": "freeprwebdirectory.com", "pattern": "https://www.freeprwebdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 50, "type": "dofollow"},
+    {"domain": "highrankdirectory.com", "pattern": "https://www.highrankdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 50, "type": "dofollow"},
+    {"domain": "prolinkdirectory.com", "pattern": "https://www.prolinkdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 48, "type": "dofollow"},
+    {"domain": "siteswebdirectory.com", "pattern": "https://www.siteswebdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 48, "type": "dofollow"},
+    {"domain": "marketinginternetdirectory.com", "pattern": "https://www.marketinginternetdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 47, "type": "dofollow"},
+    {"domain": "usawebsitesdirectory.com", "pattern": "https://www.usawebsitesdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 43, "type": "dofollow"},
+    {"domain": "ukinternetdirectory.net", "pattern": "https://www.ukinternetdirectory.net/site/{slug}-{rand_num}", "category": "Directory", "da": 43, "type": "dofollow"},
+    {"domain": "gmawebdirectory.com", "pattern": "https://www.gmawebdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 42, "type": "dofollow"},
+    {"domain": "traveltourismdirectory.info", "pattern": "https://www.traveltourismdirectory.info/site/{slug}-{rand_num}", "category": "Directory", "da": 38, "type": "dofollow"},
+    {"domain": "activdirectory.net", "pattern": "https://activdirectory.net/site/{slug}-{rand_num}", "category": "Directory", "da": 38, "type": "dofollow"},
+    {"domain": "submissionwebdirectory.com", "pattern": "http://www.submissionwebdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 32, "type": "dofollow"},
+    {"domain": "info-listings.com", "pattern": "https://info-listings.com/site/{slug}-{rand_num}", "category": "Directory", "da": 31, "type": "dofollow"},
+    {"domain": "gainweb.org", "pattern": "https://www.gainweb.org/site/{slug}-{rand_num}", "category": "Directory", "da": 28, "type": "dofollow"},
+    {"domain": "tagshub.com", "pattern": "https://tagshub.com/tags/{slug}-{rand_num}", "category": "Directory", "da": 27, "type": "dofollow"},
+    {"domain": "quicklinks.net", "pattern": "https://quicklinks.net/site/{slug}-{rand_num}", "category": "Directory", "da": 27, "type": "dofollow"},
+    {"domain": "promotebusinessdirectory.com", "pattern": "http://promotebusinessdirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 25, "type": "dofollow"},
+    {"domain": "sitepromotiondirectory.com", "pattern": "http://www.sitepromotiondirectory.com/site/{slug}-{rand_num}", "category": "Directory", "da": 25, "type": "dofollow"},
+    {"domain": "morefunz.com", "pattern": "https://morefunz.com/site/{slug}-{rand_num}", "category": "Directory", "da": 25, "type": "dofollow"},
+    {"domain": "weboworld.com", "pattern": "https://weboworld.com/site/{slug}-{rand_num}", "category": "Directory", "da": 25, "type": "dofollow"},
+
+    # High DA Web 2.0 & Authority Networks
     {"domain": "medium.com", "pattern": "https://medium.com/@{author_slug}/{slug}-{rand_num}", "category": "Web 2.0", "da": 95, "type": "dofollow"},
     {"domain": "telegra.ph", "pattern": "https://telegra.ph/{slug}-{rand_num}", "category": "Web 2.0", "da": 85, "type": "dofollow"},
     {"domain": "blogspot.com", "pattern": "https://{slug}-{rand_num}.blogspot.com/p/guide.html", "category": "Web 2.0", "da": 92, "type": "dofollow"},
@@ -56,14 +78,8 @@ SIMULATED_PLATFORMS = [
     {"domain": "reddit.com", "pattern": "https://reddit.com/r/seo/comments/{rand_num}/{slug}", "category": "Social Bookmarking", "da": 97, "type": "nofollow"},
     {"domain": "scoop.it", "pattern": "https://scoop.it/t/{slug}/p/{rand_num}", "category": "Social Bookmarking", "da": 87, "type": "dofollow"},
     {"domain": "folkd.com", "pattern": "https://folkd.com/page/{slug}-{rand_num}", "category": "Social Bookmarking", "da": 78, "type": "dofollow"},
-    {"domain": "diigo.com", "pattern": "https://diigo.com/user/{author_slug}/b/{rand_num}", "category": "Social Bookmarking", "da": 88, "type": "nofollow"},
-    {"domain": "yellowpages.com", "pattern": "https://yellowpages.com/listing/{slug}-{rand_num}", "category": "Directory", "da": 86, "type": "dofollow"},
-    {"domain": "clutch.co", "pattern": "https://clutch.co/profile/{slug}-{rand_num}", "category": "Directory", "da": 87, "type": "dofollow"},
-    {"domain": "producthunt.com", "pattern": "https://producthunt.com/posts/{slug}-{rand_num}", "category": "Directory", "da": 90, "type": "dofollow"},
     {"domain": "github.com", "pattern": "https://github.com/{author_slug}/{slug}-guide", "category": "Profile", "da": 96, "type": "dofollow"},
-    {"domain": "gitlab.com", "pattern": "https://gitlab.com/{author_slug}/{slug}-doc", "category": "Profile", "da": 92, "type": "dofollow"},
-    {"domain": "behance.net", "pattern": "https://behance.net/gallery/{rand_num}/{slug}", "category": "Profile", "da": 92, "type": "dofollow"},
-    {"domain": "issuu.com", "pattern": "https://issuu.com/{author_slug}/docs/{slug}-{rand_num}", "category": "Profile", "da": 93, "type": "dofollow"}
+    {"domain": "gitlab.com", "pattern": "https://gitlab.com/{author_slug}/{slug}-doc", "category": "Profile", "da": 92, "type": "dofollow"}
 ]
 
 from backend.config import DEFAULT_AUTHOR_EMAIL
