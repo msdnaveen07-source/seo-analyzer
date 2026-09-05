@@ -39,7 +39,7 @@ export default function App() {
 
     setLoading(true);
     try {
-      const { ok, data } = await apiFetch('/api/audit', {
+      const { ok, status, data } = await apiFetch('/api/audit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target: target.trim(), keyword: keyword.trim() }),
@@ -48,7 +48,8 @@ export default function App() {
         setAuditData(data);
         fetchHistory(target.trim());
       } else {
-        alert(`Audit failed: ${data.detail || data.error || 'Unknown error'}`);
+        const errMsg = data.detail || data.error || (status ? `HTTP ${status} server error` : 'Unknown error');
+        alert(`Audit failed: ${errMsg}`);
       }
     } catch (err) {
       alert(`Network error: ${err.message}`);

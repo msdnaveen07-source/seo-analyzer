@@ -48,11 +48,15 @@ app.mount("/backlinks", StaticFiles(directory="backups/backlinks"), name="backli
 app.include_router(audit_router)
 app.include_router(backlinks_router, prefix="/api/backlinks")
 
-@app.get("/")
+@app.get("/api/health")
 def read_root():
     return {
         "status": "online",
         "service": "Local Agentic On-Page SEO Analyzer API",
         "docs": "/docs",
     }
+
+if os.path.exists("frontend/dist"):
+    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
+
 
