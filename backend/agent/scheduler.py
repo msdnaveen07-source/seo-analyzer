@@ -57,11 +57,24 @@ def check_and_run_daily_schedule():
 
 def scheduler_loop():
     print("[24/7 Agentic Auto-Scheduler] Background daemon active and monitoring daily schedule.")
+    last_ping_time = 0
     while True:
         try:
             check_and_run_daily_schedule()
         except Exception as e:
             print(f"Scheduler loop error: {e}")
+        
+        # Self Keep-Alive Ping every 5 minutes (300 seconds) to prevent Render free instance spin-down
+        try:
+            now_ts = time.time()
+            if now_ts - last_ping_time >= 300:
+                import requests
+                render_url = os.getenv("RENDER_EXTERNAL_URL", "https://seo-analyzer-v4pu.onrender.com")
+                requests.get(f"{render_url}/api/health", timeout=5)
+                last_ping_time = now_ts
+        except Exception:
+            pass
+
         time.sleep(60) # Check every 60 seconds
 
 def start_background_scheduler():
