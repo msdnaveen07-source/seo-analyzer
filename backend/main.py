@@ -38,16 +38,20 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "https://palegreen-fish-937843.hostingersite.com"],
-    allow_origin_regex=".*hostingersite\\.com.*",
+    allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 app.mount("/backlinks", StaticFiles(directory="backups/backlinks"), name="backlinks")
 app.include_router(audit_router)
 app.include_router(backlinks_router, prefix="/api/backlinks")
+
+@app.options("/{full_path:path}")
+def options_handler(full_path: str):
+    return {}
 
 @app.get("/api/health")
 def read_root():
