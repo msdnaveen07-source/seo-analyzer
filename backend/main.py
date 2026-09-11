@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.routers.audit import router as audit_router
 from backend.routers.backlinks import router as backlinks_router
+from backend.routers.scrape_router import router as scrape_router
 from backend.db.database import engine, Base
 import backend.db.models  # Register models
 import os
@@ -48,6 +49,7 @@ app.add_middleware(
 app.mount("/backlinks", StaticFiles(directory="backups/backlinks"), name="backlinks")
 app.include_router(audit_router)
 app.include_router(backlinks_router, prefix="/api/backlinks")
+app.include_router(scrape_router)
 
 @app.options("/{full_path:path}")
 def options_handler(full_path: str):

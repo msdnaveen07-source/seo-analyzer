@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Search, ShieldCheck, AlertTriangle, XCircle, CheckCircle2, 
-  Wand2, FileText, Download, TrendingUp, Cpu, Layers, RefreshCw, Code, Check, Link as LinkIcon
+  Wand2, FileText, Download, TrendingUp, Cpu, Layers, RefreshCw, Code, Check, Link as LinkIcon, Sparkles
 } from 'lucide-react';
 import BacklinkManager from './components/BacklinkManager';
+import ScrapeStudio from './components/ScrapeStudio';
 import { apiFetch } from './api';
 
 export default function App() {
-  const [mainTab, setMainTab] = useState('seo'); // 'seo' | 'backlinks'
+  const [mainTab, setMainTab] = useState('seo'); // 'seo' | 'backlinks' | 'scrape'
   const [target, setTarget] = useState('https://example.com');
   const [keyword, setKeyword] = useState('seo optimization');
   const [loading, setLoading] = useState(false);
@@ -133,6 +134,12 @@ export default function App() {
             >
               <LinkIcon size={16} /> Backlink Manager & Reports
             </button>
+            <button 
+              className={`tab-btn ${mainTab === 'scrape' ? 'active' : ''}`}
+              onClick={() => setMainTab('scrape')}
+            >
+              <Sparkles size={16} /> Scrape & LLM Studio
+            </button>
           </div>
         </div>
       </header>
@@ -142,6 +149,8 @@ export default function App() {
         
         {mainTab === 'backlinks' ? (
           <BacklinkManager />
+        ) : mainTab === 'scrape' ? (
+          <ScrapeStudio />
         ) : (
           <>
             {/* Input Control Card */}
