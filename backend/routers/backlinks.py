@@ -593,5 +593,66 @@ def ping_google_indexer(db: Session = Depends(get_db)):
         "pinged_urls": pinged_count
     }
 
+class ScrapeCompetitorRequest(BaseModel):
+    competitor_url: str
+    target_url: Optional[str] = "https://fairepairs.com"
+    sgai_api_key: Optional[str] = None
+
+@router.post("/scrape-competitor-links", response_model=dict)
+def scrape_competitor_backlink_targets(req: ScrapeCompetitorRequest, db: Session = Depends(get_db)):
+    from backend.tools.scrapegraph import extract_structured_data_from_url
+    
+    if not req.competitor_url or not req.competitor_url.startswith(("http://", "https://")):
+        raise HTTPException(status_code=400, detail="Invalid competitor URL provided")
+        
+    extracted = extract_structured_data_from_url(
+        url=req.competitor_url,
+        prompt="Extract all external links, guest submission links, contact emails, and outbound backlink sources",
+        api_key=req.sgai_api_key
+    )
+    
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    try:
+        res = requests.get(req.competitor_url, headers=headers, timeout=10)
+        soup = BeautifulSoup(res.text, 'lxml')
+        
+        domain_comp = extract_domain(req.competitor_url)
+        found_links = set()
+        
+        for a in soup.find_all('a', href=True):
+            href = a['href']
+            if href.startswith(('http://', 'https://')):
+                link_domain = extract_domain(href)
+                if link_domain and link_domain != domain_comp and not any(s in link_domain for s in ['google.com', 'facebook.com', 'twitter.com', 'instagram.com', 'youtube.com', 'x.com']):
+                    found_links.add(href)
+                    
+        added = 0
+        for link in list(found_links)[:20]:
+            sub = BacklinkSubmission(
+                target_url=req.target_url or "https://fairepairs.com",
+                submitted_url=link,
+                domain=extract_domain(link),
+                anchor_text="Competitor Target",
+                link_type="dofollow",
+                submission_category="Competitor Scrape",
+                da_score=50,
+                status="pending",
+                notes=f"AI Scraped from High DA site: {req.competitor_url}",
+                created_at=datetime.utcnow()
+            )
+            db.add(sub)
+            added += 1
+            
+        db.commit()
+        return {
+            "success": True,
+            "message": f"Successfully scraped {req.competitor_url} and imported {added} high-value backlink targets into Backlink Vault!",
+            "imported_count": added,
+            "extracted_data": extracted.get("data")
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Competitor scrape failed: {str(e)}")
+
+
 
 

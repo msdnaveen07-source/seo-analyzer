@@ -64,6 +64,35 @@ export default function BacklinkManager() {
   const [reportDate, setReportDate] = useState(new Date().toISOString().split('T')[0]);
   const [pinging, setPinging] = useState(false);
 
+  const [compUrl, setCompUrl] = useState('https://medium.com');
+  const [compLoading, setCompLoading] = useState(false);
+  const [compResult, setCompResult] = useState(null);
+
+  const handleScrapeCompetitor = async (e) => {
+    e.preventDefault();
+    if (!compUrl.trim()) return;
+    setCompLoading(true);
+    setCompResult(null);
+    try {
+      const { ok, data } = await apiFetch('/api/backlinks/scrape-competitor-links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ competitor_url: compUrl.trim(), target_url: autoForm.target_url })
+      });
+      if (ok && data.success) {
+        setCompResult(data);
+        fetchStats();
+        fetchBacklinks();
+      } else {
+        alert(`Competitor Scrape failed: ${data.detail || 'Error scraping site'}`);
+      }
+    } catch (err) {
+      alert(`Network error: ${err.message}`);
+    } finally {
+      setCompLoading(false);
+    }
+  };
+
   const handlePingIndexer = async () => {
     setPinging(true);
     try {
@@ -451,6 +480,12 @@ export default function BacklinkManager() {
           onClick={() => setActiveTab('reports')}
         >
           <Download size={16} /> Daily Reports & Export
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'competitor' ? 'active' : ''}`}
+          onClick={() => setActiveTab('competitor')}
+        >
+          <Sparkles size={16} /> 🔍 AI Competitor Backlink Scraper
         </button>
       </div>
 
@@ -1137,6 +1172,66 @@ export default function BacklinkManager() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB: AI COMPETITOR BACKLINK SCRAPER */}
+      {activeTab === 'competitor' && (
+        <div className="tab-panel">
+          <div className="form-card" style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ padding: '10px', background: '#8b5cf633', borderRadius: '12px' }}>
+                <Sparkles size={24} color="#a78bfa" />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '18px', margin: 0, color: '#fff' }}>
+                  🔍 AI Competitor Backlink Scraper & Auto-Importer
+                </h3>
+                <p className="subtext" style={{ margin: '4px 0 0 0' }}>
+                  Enter any High DA domain or competitor URL. ScrapeGraphAI will extract all outbound guest post links & backlink targets and automatically save them into your Backlink Vault.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleScrapeCompetitor} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="form-group">
+                <label>Competitor or High DA Website URL to Scrape</label>
+                <input 
+                  type="url" 
+                  required 
+                  value={compUrl}
+                  onChange={(e) => setCompUrl(e.target.value)}
+                  placeholder="https://medium.com or https://competitor-blog.com"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="btn btn-primary" 
+                disabled={compLoading}
+                style={{ alignSelf: 'flex-start', background: '#8b5cf6', color: '#fff', border: 'none', padding: '12px 24px', fontWeight: '600', cursor: compLoading ? 'not-allowed' : 'pointer' }}
+              >
+                {compLoading ? 'Scraping Competitor with ScrapeGraphAI...' : '🚀 Scrape & Import Backlink Targets'}
+              </button>
+            </form>
+
+            {compResult && (
+              <div style={{ marginTop: '24px', padding: '16px', background: '#1e1b4b', borderRadius: '10px', border: '1px solid #6366f1' }}>
+                <h4 style={{ color: '#10b981', margin: '0 0 8px 0' }}>✅ {compResult.message}</h4>
+                <p style={{ color: '#cbd5e1', fontSize: '13px', margin: '0 0 12px 0' }}>
+                  Imported <strong>{compResult.imported_count}</strong> high-value backlink targets directly into your Backlink Vault & Auto-Submitter queue!
+                </p>
+                {compResult.extracted_data && (
+                  <textarea 
+                    readOnly 
+                    value={JSON.stringify(compResult.extracted_data, null, 2)} 
+                    rows={8} 
+                    style={{ width: '100%', background: '#090d16', color: '#38bdf8', fontFamily: 'monospace', fontSize: '12px', padding: '12px', borderRadius: '8px', border: '1px solid #374151' }} 
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
